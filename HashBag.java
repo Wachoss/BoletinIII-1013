@@ -15,13 +15,9 @@ public class HashBag<E> {
     }
 
     /**
-     * (b) Devuelve el número de copias de un item [cite: 31]
+     * (b) Devuelve el número de copias de un item
      */
     public int count(E item) {
-        // Tu código aquí:
-        // 1. Calcula posición inicial con hash(item)
-        // 2. Recorre linealmente mientras count sea distinto de -1
-        // 3. Si encuentras el item, devuelve su valor en 'count'
         int pos =hash(item);
         while(count.get(pos)!=-1){
             if (count.get(pos)>0 && table.get(pos).equals(item)) return count.get(pos);
@@ -32,14 +28,44 @@ public class HashBag<E> {
     }
 
     /**
-     * (c) Añade una copia del elemento [cite: 33]
-     * Devuelve true si es la primera vez que se añade, false si ya existía [cite: 34]
+     * (c) Añade una copia del elemento
+     * Devuelve true si es la primera vez que se añade, false si ya existía
      */
     public boolean add(E item) {
         // Tu código aquí:
         // 1. Si el item ya existe, incrementa su contador en 'count'
         // 2. Si no existe, busca el primer hueco disponible (-1 o 0) e insértalo
         // 3. No olvides actualizar 'size' y 'used' según corresponda
-        return false;
+        int pos = hash(item);
+        int primerHueco = -1;
+
+        while(count.get(pos) != -1 ){
+            if(item.equals(table.get(pos))){
+                count.set(pos,count.get(pos) +1);
+                size++;
+                return false;
+            }
+
+            if(count.get(pos) == 0 && primerHueco ==-1){
+                primerHueco = pos;
+            }
+            pos = (pos+1) % table.size();
+            if(pos == hash(item))break;
+        }
+        int destino;
+        if(primerHueco != -1){
+            destino = primerHueco;
+        } else {
+            destino = pos;
+        }
+        if(count.get(destino) == -1){
+            used ++;
+        }
+
+        table.set(destino, item);
+        count.set(destino, 1);
+        size++;
+        return true;
+
     }
 }
