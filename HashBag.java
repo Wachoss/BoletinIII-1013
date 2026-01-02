@@ -22,6 +22,12 @@ public class HashBag<E> {
         // 1. Calcula posición inicial con hash(item)
         // 2. Recorre linealmente mientras count sea distinto de -1
         // 3. Si encuentras el item, devuelve su valor en 'count'
+        int pos =hash(item);
+        while(count.get(pos)!=-1){
+            if (count.get(pos)>0 && table.get(pos).equals(item)) return count.get(pos);
+            pos = (pos + 1) % table.size();
+            if (pos == hash(item)) break;
+        }
         return 0;
     }
 
